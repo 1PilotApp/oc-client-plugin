@@ -1,0 +1,20 @@
+fields:
+    private_key:
+        label: 1Pilot private key
+        span: full
+        required: 1
+        type: text
+
+    skip_timestamp_validation:
+        label: Skip timestamp validation
+        span: full
+        default: 0
+        type: checkbox
+
+    _skip_timestamp_validation_warning:
+        type: partial
+        path: $/onepilot/client/models/settings/_skip_timestamp_validation_warning.htm
+        trigger:
+            action: show
+            field: skip_timestamp_validation
+            condition: checked

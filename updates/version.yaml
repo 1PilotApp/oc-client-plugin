@@ -1,0 +1,22 @@
+0.1.0:
+    - Initialize plugin.
+    - initialize_settings.php
+0.1.1:
+    - Display core changelog
+1.0.0:
+    - Response format improved
+1.0.1:
+    - Migrate from CmsPilot
+    - migrate_from_cmspilot.php
+1.0.2:
+    - Add Email Verification & Central Error Logs support
+1.0.3:
+    - Improve remote install stability
+1.0.4:
+    - Improve management of plugins disabled & plugins with disabled updates
+1.0.5:
+    - Add support of the new October version powered by Laravel 6
+1.0.6:
+    - Fix compatibility issues with October 472
+1.1.0:
+    - Add October v2 support, composer installation and possibility to disable update/install from 1Pilot

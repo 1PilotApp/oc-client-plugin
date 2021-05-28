@@ -1,0 +1,8 @@
+{
+  "name": "onepilot/client-plugin",
+  "type": "october-plugin",
+  "description": "Central dashboard to manage your OctoberCMS websites",
+  "require": {
+    "composer/installers": "~1.0"
+  }
+}
