@@ -2,6 +2,22 @@
   "name": "onepilot/client-plugin",
   "type": "october-plugin",
   "description": "Central dashboard to manage your OctoberCMS websites",
+  "keywords": [
+    "1Pilot",
+    "october",
+    "cms",
+    "uptime",
+    "remote",
+    "monitoring"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "1Pilot",
+      "homepage": "https://1Pilot.io",
+      "email": "support@1pilot.io"
+    }
+  ],
   "require": {
     "composer/installers": "~1.0"
   }
