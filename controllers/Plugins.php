@@ -2,6 +2,7 @@
 
 namespace OnePilot\Client\Controllers;
 
+use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use OnePilot\Client\Classes\Response;
@@ -40,7 +41,7 @@ class Plugins extends Controller
             $manager->downloadPlugin($code, $hash);
             $manager->extractPlugin($code, $hash);
             $manager->update();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new OnePilotException('Error during plugin update', 500, $e);
         }
 
@@ -110,9 +111,13 @@ class Plugins extends Controller
     {
         $updateManager = UpdateManager::instance();
 
-        $productsDetails = $updateManager->requestServerData('plugin/details', [
-            'names' => $plugins->pluck('code')->toArray(),
-        ]);
+        try {
+            $productsDetails = $updateManager->requestServerData('plugin/details', [
+                'names' => $plugins->pluck('code')->toArray(),
+            ]);
+        } catch (Exception $e) {
+            return collect();
+        }
 
         return collect($productsDetails)
             ->filter(function ($item) {

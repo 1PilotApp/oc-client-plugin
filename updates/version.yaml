@@ -20,3 +20,5 @@
     - Fix compatibility issues with October 472
 1.1.0:
     - Add October v2 support, composer installation and possibility to disable update/install from 1Pilot
+1.1.1:
+    - Avoid exception when plugins details can't be fetched from October CMS market
