@@ -1,14 +1,15 @@
 <?php namespace OnePilot\Client;
 
+use Carbon\Carbon;
+use Event;
+use OnePilot\Client\Classes\ComposerUpdateScheduler;
 use OnePilot\Client\Exceptions\Handler;
 use OnePilot\Client\Models\Settings;
 use System\Classes\PluginBase;
 use System\Classes\SettingsManager;
-use Carbon\Carbon;
 
 class Plugin extends PluginBase
 {
-
     public function pluginDetails()
     {
         return [
@@ -53,8 +54,29 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function register()
+    {
+        $this->registerConsoleCommand('OnePilot.RunComposerUpdate', Console\RunComposerUpdate::class);
+    }
+
     public function boot()
     {
         Handler::register();
+
+        $this->registerRunComposerUpdateSchedule();
+    }
+
+    private function registerRunComposerUpdateSchedule()
+    {
+        if (!class_exists('System')) {
+            return; // Only for OCv2
+        }
+
+        // Register schedule at the end to no impact website schedules
+        Event::listen('console.schedule', function ($schedule) {
+            $schedule->command(Console\RunComposerUpdate::class)
+                ->when(ComposerUpdateScheduler::hasTask())
+                ->withoutOverlapping();
+        });
     }
 }

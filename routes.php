@@ -12,6 +12,10 @@ Route::group([
     Route::post('core/update', 'Core@update');
     Route::post('plugin/install', 'Extensions@install');
     Route::post('plugin/update', 'Plugins@update');
+
+    Route::post('composer/update', 'Composer@update');
+    Route::post('composer/core-update', 'Composer@coreUpdate');
+
     Route::post('validate', 'Validate@validate');
     Route::post('errors', 'Errors@index');
     Route::post('mail-tester', 'MailTester@send');
