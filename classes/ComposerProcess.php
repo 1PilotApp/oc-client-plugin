@@ -45,7 +45,7 @@ class ComposerProcess
             '--with-dependencies',
         ]));
 
-        $process->setTimeout(180);
+        $process->setTimeout(600);
         $process->run();
 
         $command = $process->getCommandLine();
