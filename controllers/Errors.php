@@ -43,7 +43,7 @@ class Errors
 
     /**
      * Return the log activity of the last day,week,month by Level
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
     public function overview()
     {

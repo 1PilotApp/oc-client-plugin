@@ -26,7 +26,7 @@ class ComposerProcess
     }
 
     /**
-     * @param string $package
+     * @param array $packages
      *
      * @return string
      *
