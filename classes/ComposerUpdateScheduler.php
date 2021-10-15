@@ -27,7 +27,7 @@ class ComposerUpdateScheduler
 
     /**
      * @return array[]
-     * @psasadsdlm-return array<array{package:string, uuid:string, callbackUrl:string}>
+     * @psalm-return array<array{package:string, uuid:string, callbackUrl:string}>
      */
     public static function getTasks()
     {
