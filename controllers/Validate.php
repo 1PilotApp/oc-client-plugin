@@ -4,6 +4,7 @@ namespace OnePilot\Client\Controllers;
 
 use DB;
 use Illuminate\Routing\Controller;
+use OnePilot\Client\Classes\Composer;
 use OnePilot\Client\Classes\Files;
 use OnePilot\Client\Classes\OctoberUpdateServer;
 use OnePilot\Client\Classes\Response;
@@ -55,6 +56,19 @@ class Validate extends Controller
         $version = method_exists($updateManager, 'getCurrentVersion')
             ? $updateManager->getCurrentVersion() // OCMS V2
             : Parameter::get('system::core.build', 1); // OCMS V1
+
+        if (empty($version)) {
+            $package = (new Composer)->getPackage('october/system');
+
+            if (!empty($package)) {
+                return [
+                    'version' => (string)$package['version'] ?? null,
+                    'new_version' => (string)$package['new_version'] ?? null,
+                    'update_enabled' => !config('cms.disableCoreUpdates', false),
+                    'changelog' => null,
+                ];
+            }
+        }
 
         return [
             'version' => (string)$version,
