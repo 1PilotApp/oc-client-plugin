@@ -2,7 +2,9 @@
 
 use Carbon\Carbon;
 use Event;
+use OnePilot\Client\Classes\ComposerPackageDetector;
 use OnePilot\Client\Classes\ComposerUpdateScheduler;
+use OnePilot\Client\Contracts\PackageDetector;
 use OnePilot\Client\Exceptions\Handler;
 use OnePilot\Client\Models\Settings;
 use System\Classes\PluginBase;
@@ -57,6 +59,10 @@ class Plugin extends PluginBase
     public function register()
     {
         $this->registerConsoleCommand('OnePilot.RunComposerUpdate', Console\RunComposerUpdate::class);
+
+        $this->app->bind(PackageDetector::class, function ($app) {
+            return new ComposerPackageDetector(base_path());
+        });
     }
 
     public function boot()
