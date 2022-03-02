@@ -7,14 +7,15 @@ use Config;
 use Http;
 use Lang;
 use October\Rain\Filesystem\Zip;
+use Request;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use Url;
 
 /**
  * Override \System\Classes\UpdateManager
- * to properly report extension update for OCMS version <472
- *  Gateway use protocol_version 1.2
+ * to properly report extension update for OCMS version <1.0.475
+ *  Gateway use protocol_version 1.3
  *
  * to allow plugin updates ( requestServerFile, extractPlugin )
  */
@@ -37,12 +38,13 @@ class UpdateManager extends \System\Classes\UpdateManager
             return;
         }
 
-        $postData['protocol_version'] = '1.2';
-        $postData['client'] = 'october';
+        $postData['protocol_version'] = '1.3';
+        $postData['client'] = 'October CMS';
 
         $postData['server'] = base64_encode(json_encode([
             'php' => PHP_VERSION,
             'url' => Url::to('/'),
+            'ip' => Request::ip(),
             'since' => PluginVersion::orderBy('created_at')->value('created_at'),
         ]));
 

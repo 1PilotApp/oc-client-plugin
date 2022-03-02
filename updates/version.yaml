@@ -24,3 +24,5 @@
     - Avoid exception when plugins details can't be fetched from October CMS market
 1.2.0:
     - Add possibility to update October v2 (plugins & core) from 1Pilot
+1.2.1:
+    - Fix update reporting issue with October 1.0
