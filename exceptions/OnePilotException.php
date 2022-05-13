@@ -41,7 +41,7 @@ class OnePilotException extends ApplicationException implements HttpExceptionInt
      *
      * @return int An HTTP response status code
      */
-    public function getStatusCode()
+    public function getStatusCode(): int
     {
         return $this->code;
     }
@@ -51,7 +51,7 @@ class OnePilotException extends ApplicationException implements HttpExceptionInt
      *
      * @return array Response headers
      */
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return [];
     }
