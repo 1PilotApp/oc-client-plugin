@@ -17,7 +17,7 @@ Route::group([
     Route::post('composer/core-update', 'Composer@coreUpdate');
 
     Route::post('validate', 'Validate@validate');
-    Route::post('errors', 'Errors@index');
+    Route::post('errors', 'Errors@browse');
     Route::post('mail-tester', 'MailTester@send');
     Route::post('ping', 'Ping@ping');
 });

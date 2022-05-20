@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Routing\Controller;
 use OnePilot\Client\Classes\Composer;
 use OnePilot\Client\Classes\Files;
+use OnePilot\Client\Classes\LogsOverview;
 use OnePilot\Client\Classes\OctoberUpdateServer;
 use OnePilot\Client\Classes\Response;
 use OnePilot\Client\Classes\UpdateManager;
@@ -44,7 +45,7 @@ class Validate extends Controller
             'plugins' => (new Plugins)->all(array_get($updates, 'plugins', [])),
             'themes' => (new Themes)->all(array_get($updates, 'themes', [])),
             'files' => Files::instance()->getFilesProperties(),
-            'errors' => (new Errors)->overview(),
+            'errors' => $this->errorsOverview(),
             'extra' => $this->extra(),
         ]);
     }
@@ -87,6 +88,14 @@ class Validate extends Controller
             'web' => $serverWeb,
             'mysql' => $this->dbVersion(),
         ];
+    }
+
+    private function errorsOverview()
+    {
+        try {
+            return (new LogsOverview())->get();
+        } catch (\Exception $e) {
+        }
     }
 
     /**
