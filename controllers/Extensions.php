@@ -4,9 +4,9 @@ namespace OnePilot\Client\Controllers;
 
 use Cms\Classes\ThemeManager;
 use DirectoryIterator;
-use Http;
 use Illuminate\Routing\Controller;
 use October\Rain\Filesystem\Zip;
+use October\Rain\Network\Http;
 use OnePilot\Client\Classes\File;
 use OnePilot\Client\Classes\Response;
 use OnePilot\Client\Classes\UpdateManager;
