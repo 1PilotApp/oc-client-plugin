@@ -26,3 +26,5 @@
     - Add possibility to update October v2 (plugins & core) from 1Pilot
 1.2.1:
     - Fix update reporting issue with October 1.0
+1.2.2:
+    - Add October v3 support and Read logs from files instead of the DB
