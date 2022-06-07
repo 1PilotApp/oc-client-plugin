@@ -56,8 +56,6 @@ class ComposerProcess
             throw new ApplicationException($process->getErrorOutput(), 500);
         }
 
-        Log::info($command . PHP_EOL . $process->getErrorOutput() . $process->getOutput());
-
         return $process->getErrorOutput() . PHP_EOL . $process->getOutput();
     }
 

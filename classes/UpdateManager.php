@@ -4,9 +4,9 @@ namespace OnePilot\Client\Classes;
 
 use ApplicationException;
 use Config;
-use Http;
 use Lang;
 use October\Rain\Filesystem\Zip;
+use October\Rain\Network\Http;
 use Request;
 use System\Models\Parameter;
 use System\Models\PluginVersion;

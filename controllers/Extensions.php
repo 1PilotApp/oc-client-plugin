@@ -4,9 +4,9 @@ namespace OnePilot\Client\Controllers;
 
 use Cms\Classes\ThemeManager;
 use DirectoryIterator;
-use Http;
 use Illuminate\Routing\Controller;
 use October\Rain\Filesystem\Zip;
+use October\Rain\Network\Http;
 use OnePilot\Client\Classes\File;
 use OnePilot\Client\Classes\Response;
 use OnePilot\Client\Classes\UpdateManager;
@@ -299,6 +299,11 @@ class Extensions extends Controller
                 }
 
                 for ($j = $i + 1; $j < count($tokens); $j++) {
+                    if (defined('T_NAME_QUALIFIED') && $tokens[$j][0] === T_NAME_QUALIFIED) {
+                        $namespace = explode('\\', $tokens[$j][1]);
+                        break;
+                    }
+
                     if ($tokens[$j][0] === T_STRING) {
                         $namespace[] = $tokens[$j][1];
                     } elseif ($tokens[$j] === '{' || $tokens[$j] === ';') {
