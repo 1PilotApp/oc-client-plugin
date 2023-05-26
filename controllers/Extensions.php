@@ -121,6 +121,10 @@ class Extensions extends Controller
      */
     private function installTheme($file)
     {
+        if (!class_exists(ThemeManager::class)) {
+            throw new OnePilotException('"october/cms" module is not installed', 500);
+        }
+
         $themeManager = ThemeManager::instance();
 
         $theme = Yaml::parseFile($file->getPathname());

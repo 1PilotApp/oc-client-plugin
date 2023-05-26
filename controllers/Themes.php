@@ -10,6 +10,10 @@ class Themes extends Controller
 {
     public function all($updates = [])
     {
+        if (!class_exists(CmsTheme::class)) {
+            return collect(); // CMS module not installed
+        }
+
         $themes = CmsTheme::all();
         $themeManager = ThemeManager::instance();
 
