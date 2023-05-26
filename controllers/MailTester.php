@@ -40,7 +40,7 @@ class MailTester extends Controller
         Mail::send([], [], function (\Illuminate\Mail\Message $message) use ($email) {
             $message
                 ->to($email)
-                ->subject('Test send by 1Pilot.io for ensure emails are properly sent');
+                ->subject('Test send by 1Pilot.io to ensure emails are properly sent');
 
             // Laravel < 9.x SwiftMailer
             if (method_exists($message, 'getSwiftMessage')) {
