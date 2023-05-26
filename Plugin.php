@@ -1,7 +1,7 @@
 <?php namespace OnePilot\Client;
 
-use Carbon\Carbon;
 use Event;
+use Illuminate\Console\Scheduling\Schedule;
 use OnePilot\Client\Classes\ComposerPackageDetector;
 use OnePilot\Client\Classes\ComposerUpdateScheduler;
 use OnePilot\Client\Contracts\PackageDetector;
@@ -39,11 +39,14 @@ class Plugin extends PluginBase
         ];
     }
 
+    /**
+     * @param Schedule $schedule
+     */
     public function registerSchedule($schedule)
     {
         $schedule->call(function () {
-            Settings::set('last_cron_at', Carbon::now()->timestamp);
-        })->everyTenMinutes();
+            Settings::instance()->logCronExecution();
+        })->everyFiveMinutes();
     }
 
     public function registerPermissions()
