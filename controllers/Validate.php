@@ -9,7 +9,7 @@ use OnePilot\Client\Classes\Files;
 use OnePilot\Client\Classes\LogsOverview;
 use OnePilot\Client\Classes\OctoberUpdateServer;
 use OnePilot\Client\Classes\Response;
-use OnePilot\Client\Classes\UpdateManager;
+use OnePilot\Client\Classes\UpdateManagerFactory;
 use OnePilot\Client\Models\Settings;
 use System\Models\Parameter;
 
@@ -52,7 +52,7 @@ class Validate extends Controller
 
     private function core($updates)
     {
-        $updateManager = UpdateManager::instance();
+        $updateManager = UpdateManagerFactory::instance();
 
         $version = method_exists($updateManager, 'getCurrentVersion')
             ? $updateManager->getCurrentVersion() // OCMS V2

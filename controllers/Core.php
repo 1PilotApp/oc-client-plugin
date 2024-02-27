@@ -4,7 +4,7 @@ namespace OnePilot\Client\Controllers;
 
 use Illuminate\Routing\Controller;
 use OnePilot\Client\Classes\Response;
-use OnePilot\Client\Classes\UpdateManager;
+use OnePilot\Client\Classes\UpdateManagerOverrideV1;
 use OnePilot\Client\Exceptions\OnePilotException;
 
 class Core extends Controller
@@ -23,7 +23,7 @@ class Core extends Controller
             throw new OnePilotException("Core update is currently not supported for October CMS v2", 500);
         }
 
-        $manager = UpdateManager::instance();
+        $manager = UpdateManagerOverrideV1::instance();
         $updateList = $manager->requestUpdateList(true);
 
         $coreHash = array_get($updateList, 'core.hash');

@@ -19,7 +19,7 @@ use Url;
  *
  * to allow plugin updates ( requestServerFile, extractPlugin )
  */
-class UpdateManager extends \System\Classes\UpdateManager
+class UpdateManagerOverrideV1 extends \System\Classes\UpdateManager
 {
     /**
      * Modifies the Network HTTP object with common attributes.

@@ -9,7 +9,7 @@ use System\Models\PluginVersion;
 
 class OctoberUpdateServer
 {
-    /** @var UpdateManager */
+    /** @var UpdateManagerOverrideV1 */
     private $updateManager;
 
     /** @var ThemeManager|null */
@@ -17,13 +17,13 @@ class OctoberUpdateServer
 
     public function __construct()
     {
-        $this->updateManager = UpdateManager::instance();
+        $this->updateManager = UpdateManagerFactory::instance();
         $this->themeManager = class_exists(ThemeManager::class) ? ThemeManager::instance() : null;
     }
 
     /**
      * @return array
-     * @see UpdateManager::requestUpdateList
+     * @see UpdateManagerOverrideV1::requestUpdateList
      */
     public function availableUpdates()
     {

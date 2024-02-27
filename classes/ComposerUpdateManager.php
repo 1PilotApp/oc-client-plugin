@@ -6,6 +6,7 @@ use ApplicationException;
 use Artisan;
 use Exception;
 use Illuminate\Support\Arr;
+use System\Classes\UpdateManager;
 
 class ComposerUpdateManager
 {

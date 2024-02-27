@@ -28,3 +28,5 @@
     - Fix update reporting issue with October 1.0
 1.2.2:
     - Add October v3 support and Read logs from files instead of the DB
+1.2.3:
+    - Fix compatibility issue with October 3.6

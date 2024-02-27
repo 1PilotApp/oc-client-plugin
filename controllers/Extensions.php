@@ -9,7 +9,7 @@ use October\Rain\Filesystem\Zip;
 use October\Rain\Network\Http;
 use OnePilot\Client\Classes\File;
 use OnePilot\Client\Classes\Response;
-use OnePilot\Client\Classes\UpdateManager;
+use OnePilot\Client\Classes\UpdateManagerFactory;
 use OnePilot\Client\Exceptions\OnePilotException;
 use Request;
 use SplFileInfo;
@@ -88,7 +88,7 @@ class Extensions extends Controller
         $pluginClass = PluginManager::instance()->loadPlugin($namespace, $targetPath);
 
         // Apply DB updates
-        $updateManager = UpdateManager::instance();
+        $updateManager = UpdateManagerFactory::instance();
         $updateManager->updatePlugin($pluginCode);
 
         // Get plugin version from the DB

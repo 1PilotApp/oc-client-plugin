@@ -6,7 +6,8 @@ use Exception;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Collection;
 use OnePilot\Client\Classes\Response;
-use OnePilot\Client\Classes\UpdateManager;
+use OnePilot\Client\Classes\UpdateManagerFactory;
+use OnePilot\Client\Classes\UpdateManagerOverrideV1;
 use OnePilot\Client\Exceptions\OnePilotException;
 use Request;
 use System\Models\PluginVersion;
@@ -31,7 +32,7 @@ class Plugins extends Controller
             throw new OnePilotException("Plugin update is currently not supported for October CMS v2", 500);
         }
 
-        $manager = UpdateManager::instance();
+        $manager = UpdateManagerOverrideV1::instance();
         $pluginDetails = $manager->requestPluginDetails($pluginCode);
 
         $code = array_get($pluginDetails, 'code');
@@ -109,7 +110,7 @@ class Plugins extends Controller
      */
     private function getPluginsDetails($plugins)
     {
-        $updateManager = UpdateManager::instance();
+        $updateManager = UpdateManagerFactory::instance();
 
         try {
             $productsDetails = $updateManager->requestServerData('plugin/details', [
