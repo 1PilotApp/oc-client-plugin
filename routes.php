@@ -20,4 +20,7 @@ Route::group([
     Route::post('errors', 'Errors@browse');
     Route::post('mail-tester', 'MailTester@send');
     Route::post('ping', 'Ping@ping');
+
+    Route::post('backups/check', 'Backups@check');
+    Route::post('backups/browse', 'Backups@browse');
 });
