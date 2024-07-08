@@ -40,7 +40,11 @@ class BackupsBrowser
             throw new OnePilotException("Only Spatie Backup based solutions are currently supported", 500);
         }
 
-        $statuses = BackupDestinationStatusFactory::createForMonitorConfig(config('backup.monitor_backups'));
+        if (empty($monitorConfig = config('backup.monitor_backups', config('backup.monitorBackups'))) || !is_array($monitorConfig)) {
+            throw new OnePilotException("No Spatie Backup `backup.monitor_backups` config detected", 500);
+        }
+
+        $statuses = BackupDestinationStatusFactory::createForMonitorConfig($monitorConfig);
         $status = $statuses->first();
 
         $destination = $status->backupDestination();
@@ -59,7 +63,7 @@ class BackupsBrowser
                         'date' => (string)$backup->date(),
                         'size' => method_exists($backup, 'sizeInBytes') ? $backup->sizeInBytes() : $backup->size() ?? '',
                         'file' => $backup->path(),
-                        'path' => $backup->disk()->path($backup->path()),
+                        'path' => method_exists($backup, 'disk') ? $backup->disk()->path($backup->path()) : $backup->path(),
                     ];
                 })
                 ->values(),

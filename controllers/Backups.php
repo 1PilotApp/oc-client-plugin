@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use OnePilot\Client\Classes\BackupsBrowser;
 use OnePilot\Client\Classes\SpatieBackup;
 use OnePilot\Client\Exceptions\OnePilotException;
+use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
 
@@ -23,7 +24,11 @@ class Backups extends Controller
             throw new OnePilotException("Only Spatie Backup based solutions are currently supported", 500);
         }
 
-        $statuses = BackupDestinationStatusFactory::createForMonitorConfig(config('backup.monitor_backups'));
+        if (empty($monitorConfig = config('backup.monitor_backups', config('backup.monitorBackups'))) || !is_array($monitorConfig)) {
+            throw new OnePilotException("No Spatie Backup `backup.monitor_backups` config detected", 500);
+        }
+
+        $statuses = BackupDestinationStatusFactory::createForMonitorConfig($monitorConfig);
 
         return $statuses->map(function (BackupDestinationStatus $status) {
             $destination = $status->backupDestination();
@@ -42,7 +47,10 @@ class Backups extends Controller
             ];
 
             if ($newest && $newest->exists()) {
-                $path = $newest->disk()->path($newest->path());
+                $path = method_exists($newest, 'disk')
+                    ? $newest->disk()->path($newest->path())
+                    : $newest->path();
+
                 $basePath = base_path();
 
                 if ($row['disk']['driver'] === 'local' && strpos($path, $basePath) === 0) {
@@ -57,11 +65,62 @@ class Backups extends Controller
                 ];
             }
 
-            if (!empty($failure = $status->getHealthCheckFailure())) {
+            if (method_exists($status, 'getHealthCheckFailure')) {
+                if (!empty($failure = $status->getHealthCheckFailure())) {
+                    $row['healthCheckFailure'] = [
+                        'name' => $failure->healthCheck()->name(),
+                        'message' => $failure->exception()->getMessage(),
+                    ];
+                }
+
+                return $row;
+            }
+
+            /*
+             * For legacy Spatie Backup versions
+             */
+
+            if (method_exists($status, 'dateOfNewestBackup') && !$status->dateOfNewestBackup()) {
                 $row['healthCheckFailure'] = [
-                    'name' => $failure->healthCheck()->name(),
-                    'message' => $failure->exception()->getMessage(),
+                    'name' => 'MaximumAgeInDays',
+                    'message' => 'There are no backups of this application at all.',
                 ];
+
+                return $row;
+            }
+
+            if (method_exists($status, 'newestBackupIsTooOld') && $status->newestBackupIsTooOld()) {
+                $newest = $status->dateOfNewestBackup() ?? null;
+
+                $row['healthCheckFailure'] = [
+                    'name' => 'MaximumAgeInDays',
+                    'message' => $newest
+                        ? 'The latest backup made on ' . $newest->format('Y-m-d h:i') . ' is considered too old.'
+                        : 'The latest backup is too old.',
+                ];
+
+                return $row;
+            }
+
+            if (method_exists($status, 'usesTooMuchStorage') && $status->usesTooMuchStorage()) {
+                if (!method_exists($status, 'usedStorage') || !method_exists($status, 'maximumAllowedUsageInBytes')) {
+                    $row['healthCheckFailure'] = [
+                        'name' => 'MaximumStorageInMegabytes',
+                        'message' => 'The backups are using too much storage.',
+                    ];
+
+                    return $row;
+                }
+
+                $diskUsage = Format::humanReadableSize($status->usedStorage());
+                $diskLimit = Format::humanReadableSize($status->maximumAllowedUsageInBytes());;
+
+                $row['healthCheckFailure'] = [
+                    'name' => 'MaximumStorageInMegabytes',
+                    'message' => 'The backups are using too much storage. Current usage is ' . $diskUsage . ' which is higher than the allowed limit of ' . $diskLimit . '.',
+                ];
+
+                return $row;
             }
 
             return $row;
