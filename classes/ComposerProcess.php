@@ -206,11 +206,11 @@ class ComposerProcess
     {
         $parts = Arr::flatten(array_filter($parts));
 
-        if ($composerBin = Config::get('system.composer_binary')) {
-            return array_merge([$composerBin], $parts, ['--no-ansi']);
-        }
-
         $phpBin = (new PhpExecutableFinder)->find();
+
+        if ($composerBin = Config::get('system.composer_binary')) {
+            return array_merge([$phpBin], [$composerBin], $parts, ['--no-ansi']);
+        }
 
         $composerBin = (new ExecutableFinder)->find('composer', 'composer', [
             '/usr/local/bin',
