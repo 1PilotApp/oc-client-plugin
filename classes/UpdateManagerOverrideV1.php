@@ -38,6 +38,13 @@ class UpdateManagerOverrideV1 extends \System\Classes\UpdateManager
             return;
         }
 
+        // Running Winter CMS
+        if (class_exists('\Winter\Storm\Foundation\Application')) {
+            parent::applyHttpAttributes($http, $postData);
+
+            return;
+        }
+
         $postData['protocol_version'] = '1.3';
         $postData['client'] = 'October CMS';
 
