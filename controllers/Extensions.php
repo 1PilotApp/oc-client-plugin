@@ -92,7 +92,7 @@ class Extensions extends Controller
         $updateManager->updatePlugin($pluginCode);
 
         // Get plugin version from the DB
-        $pluginVersion = PluginVersion::getVersion($pluginCode);
+        $pluginVersion = PluginVersion::where('code', $pluginCode)->first()->version ?? null;
 
         if (is_null($pluginVersion) && is_null($pluginClass)) {
             throw new OnePilotException('An error occur on the plugin install process, please retry', 500, null, [
