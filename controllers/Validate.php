@@ -9,6 +9,7 @@ use OnePilot\Client\Classes\Files;
 use OnePilot\Client\Classes\LogsOverview;
 use OnePilot\Client\Classes\OctoberUpdateServer;
 use OnePilot\Client\Classes\Response;
+use OnePilot\Client\Classes\SpatieBackup;
 use OnePilot\Client\Classes\UpdateManagerFactory;
 use OnePilot\Client\Models\Settings;
 use System\Models\Parameter;
@@ -47,6 +48,7 @@ class Validate extends Controller
             'files' => Files::instance()->getFilesProperties(),
             'errors' => $this->errorsOverview(),
             'extra' => $this->extra(),
+            'nextSteps' => $this->nextSteps(),
         ]);
     }
 
@@ -170,5 +172,21 @@ class Validate extends Controller
         $result = DB::select('select "SQLite " || sqlite_version() as version');
 
         return $result[0]->version ?? null;
+    }
+
+    /**
+     * List next validation steps that could/should be run
+     *
+     * @return array
+     */
+    private function nextSteps()
+    {
+        $steps = [];
+
+        if (SpatieBackup::isSupported()) {
+            $steps[] = 'backup';
+        }
+
+        return $steps;
     }
 }
