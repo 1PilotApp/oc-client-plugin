@@ -18,24 +18,44 @@ class Composer
 
     protected $packagist = [];
 
-    public function __construct()
+    public function __construct($includeContraints = true)
     {
         /** @var PackageDetector $detector */
         $detector = app(PackageDetector::class);
 
         self::$installedPackages = $detector->getPackages();
 
-        self::$packagesConstraints = $detector->getPackagesConstraints();
+        if ($includeContraints) {
+            self::$packagesConstraints = $detector->getPackagesConstraints();
+        }
     }
 
     /**
-     * @param string $packageName
+     * @param $name
+     * @return object|null
+     */
+    public function getRawPackage($name)
+    {
+        return self::$installedPackages->where('name', $name)->first();
+    }
+
+    /**
+     * @param $name
+     * @return string|null
+     */
+    public function getPackageVersion($name)
+    {
+        return $this->getRawPackage($name)->version ?? null;
+    }
+
+    /**
+     * @param string $name
      *
      * @return array|null
      */
-    public function getPackage($packageName)
+    public function getPackage($name)
     {
-        $package = self::$installedPackages->where('name', $packageName)->first();
+        $package = self::$installedPackages->where('name', $name)->first();
 
         if (empty($package)) {
             return null;
