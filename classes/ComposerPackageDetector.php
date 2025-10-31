@@ -10,7 +10,7 @@ class ComposerPackageDetector implements PackageDetector
     /** @var string */
     private $appRoot;
 
-    public function __construct(string $projectRoot = null)
+    public function __construct(string $projectRoot)
     {
         $this->appRoot = $projectRoot;
     }
