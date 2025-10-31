@@ -3,6 +3,8 @@
 namespace OnePilot\Client\Classes;
 
 use OnePilot\Client\Exceptions\OnePilotException;
+use Spatie\Backup\Config\Config;
+use Spatie\Backup\Config\MonitoredBackupsConfig;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
 
 class BackupsBrowser
@@ -42,6 +44,12 @@ class BackupsBrowser
 
         if (empty($monitorConfig = config('backup.monitor_backups', config('backup.monitorBackups'))) || !is_array($monitorConfig)) {
             throw new OnePilotException("No Spatie Backup `backup.monitor_backups` config detected", 500);
+        }
+
+        $spatieBackupVersion = (new Composer(false))->getPackageVersion('spatie/laravel-backup');
+
+        if (version_compare($spatieBackupVersion, '9.0.0', '>=')) {
+            $monitorConfig = MonitoredBackupsConfig::fromArray($monitorConfig);
         }
 
         $statuses = BackupDestinationStatusFactory::createForMonitorConfig($monitorConfig);

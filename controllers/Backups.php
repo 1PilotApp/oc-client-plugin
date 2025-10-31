@@ -6,8 +6,11 @@ use DB;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use OnePilot\Client\Classes\BackupsBrowser;
+use OnePilot\Client\Classes\Composer;
 use OnePilot\Client\Classes\SpatieBackup;
 use OnePilot\Client\Exceptions\OnePilotException;
+use Spatie\Backup\Config\Config;
+use Spatie\Backup\Config\MonitoredBackupsConfig;
 use Spatie\Backup\Helpers\Format;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatus;
 use Spatie\Backup\Tasks\Monitor\BackupDestinationStatusFactory;
@@ -26,6 +29,12 @@ class Backups extends Controller
 
         if (empty($monitorConfig = config('backup.monitor_backups', config('backup.monitorBackups'))) || !is_array($monitorConfig)) {
             throw new OnePilotException("No Spatie Backup `backup.monitor_backups` config detected", 500);
+        }
+
+        $spatieBackupVersion = (new Composer(false))->getPackageVersion('spatie/laravel-backup');
+
+        if (version_compare($spatieBackupVersion, '9.0.0', '>=')) {
+            $monitorConfig = MonitoredBackupsConfig::fromArray($monitorConfig);
         }
 
         $statuses = BackupDestinationStatusFactory::createForMonitorConfig($monitorConfig);
